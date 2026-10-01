@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -161,18 +162,11 @@ func (r *Resource) ImportState(ctx context.Context, req resource.ImportStateRequ
 }
 
 func splitImportID(id string) []string {
-	var parts []string
-	for _, p := range []rune(id) {
-		_ = p
+	left, right, ok := strings.Cut(id, "/")
+	if !ok || left == "" || right == "" || strings.Contains(right, "/") {
+		return nil
 	}
-	// UUIDs contain dashes but not slashes, so a single slash is unambiguous.
-	for i := 0; i < len(id); i++ {
-		if id[i] == '/' {
-			parts = append(parts, id[:i], id[i+1:])
-			break
-		}
-	}
-	return parts
+	return []string{left, right}
 }
 
 var _ resource.Resource = (*Resource)(nil)
