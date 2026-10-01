@@ -16,9 +16,11 @@ import (
 	"github.com/majestyz3/terraform-provider-bland/internal/agentdisposition"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentexperiment"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentidentity"
+	"github.com/majestyz3/terraform-provider-bland/internal/agentinbound"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentvariable"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentversion"
 	"github.com/majestyz3/terraform-provider-bland/internal/client"
+	"github.com/majestyz3/terraform-provider-bland/internal/dispositionextractor"
 	"github.com/majestyz3/terraform-provider-bland/internal/jsonresource"
 	"github.com/majestyz3/terraform-provider-bland/internal/tool"
 	"github.com/majestyz3/terraform-provider-bland/internal/versionconfig"
@@ -108,9 +110,11 @@ func (p *BlandProvider) Resources(_ context.Context) []func() resource.Resource 
 		func() resource.Resource { return agentdisposition.New() },
 		func() resource.Resource { return agentexperiment.New() },
 		func() resource.Resource { return agentidentity.New() },
+		func() resource.Resource { return agentinbound.New() },
 		func() resource.Resource { return agentversion.New() },
 		func() resource.Resource { return agentvariable.New() },
 		func() resource.Resource { return agentchecks.New() },
+		func() resource.Resource { return dispositionextractor.New() },
 		func() resource.Resource { return tool.New() },
 
 		spec("persona", "Manages a Bland Persona.", http.MethodPost, "/v1/personas", http.MethodGet, "/v1/personas/{id}", http.MethodPatch, "/v1/personas/{id}", http.MethodDelete, "/v1/personas/{id}", "data.id"),
