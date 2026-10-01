@@ -138,6 +138,14 @@ func (p *BlandProvider) DataSources(_ context.Context) []func() datasource.DataS
 		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_environments", Description: "Reads a Bland V2 Agent's dev, staging, and production environment pins.", Path: "/v2/agents/{id}/environments"}),
 		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_inbound", Description: "Reads inbound phone-number bindings for a Bland V2 Agent.", Path: "/v2/agents/{id}/inbound"}),
 		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_memory_schema", Description: "Reads the schema Bland uses to remember structured information about contacts between conversations.", Path: "/v2/agents/{id}/memory-schema"}),
+		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_versions", Description: "Lists saved versions for a Bland V2 Agent.", Path: "/v2/agents/{id}/versions"}),
+		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_branches", Description: "Lists open development branches for a Bland V2 Agent.", Path: "/v2/agents/{id}/branches"}),
+		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_dispositions", Description: "Lists dispositions defined on a Bland V2 Agent.", Path: "/v2/agents/{id}/dispositions"}),
+		jsondatasource.New(jsondatasource.Spec{TypeName: "disposition_extractors", Description: "Lists disposition extractors available to a Bland V2 Agent.", Path: "/v2/agents/{id}/dispositions/extractors"}),
+		jsondatasource.New(jsondatasource.Spec{TypeName: "disposition_judge_catalog", Description: "Reads the disposition judge catalog available to a Bland V2 Agent.", Path: "/v2/agents/{id}/dispositions/judge-catalog"}),
+		jsondatasource.New(jsondatasource.Spec{TypeName: "disposition_variable_catalog", Description: "Reads the agent-variable catalog available to dispositions.", Path: "/v2/agents/{id}/dispositions/variable-catalog"}),
+		jsondatasource.New(jsondatasource.Spec{TypeName: "disposition_model_profile_catalog", Description: "Reads model profiles available to disposition extractors.", Path: "/v2/agents/{id}/dispositions/model-profile-catalog"}),
+		jsondatasource.New(jsondatasource.Spec{TypeName: "disposition_extractor_catalog", Description: "Reads published extractors available for disposition pinning.", Path: "/v2/agents/{id}/dispositions/extractor-catalog"}),
 	}
 }
 
