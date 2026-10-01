@@ -4,6 +4,16 @@ A from-scratch Terraform provider targeting Bland's current public REST APIs, in
 
 > Status: **alpha.** It is scoped first to reproducibly manage the synthetic SCAN Health member-services demo. Validate against a Bland test organization before production use.
 
+## Repository
+
+Provider source code lives here:
+
+```text
+github.com/majestyz3/terraform-provider-bland
+```
+
+The separate `github.com/majestyz3/bland` repository is reserved for Terraform configuration specific to the SCAN interview demo and is **not** the provider source repository.
+
 ## Current resource families
 
 ### V2 Agent lifecycle
@@ -32,16 +42,7 @@ Fast-moving Bland objects use full-fidelity JSON attributes so newly-added API f
 export BLAND_API_KEY="..."
 ```
 
-```hcl
-terraform {
-  required_providers {
-    bland = {
-      source = "majestyz3/bland"
-    }
-  }
-}
-provider "bland" {}
-```
+For local development, build and install this provider from this repository using Terraform's provider development override mechanism. Registry installation instructions will be added when the provider is published.
 
 Set `BLAND_BASE_URL` (or provider `base_url`) for a compatible private/self-hosted endpoint.
 
