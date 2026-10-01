@@ -11,7 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/majestyz3/terraform-provider-bland/internal/agent"
+	"github.com/majestyz3/terraform-provider-bland/internal/agentbranch"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentchecks"
+	"github.com/majestyz3/terraform-provider-bland/internal/agentexperiment"
+	"github.com/majestyz3/terraform-provider-bland/internal/agentidentity"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentvariable"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentversion"
 	"github.com/majestyz3/terraform-provider-bland/internal/client"
@@ -100,6 +103,9 @@ func pathwaySpec() func() resource.Resource {
 func (p *BlandProvider) Resources(_ context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		func() resource.Resource { return agent.New() },
+		func() resource.Resource { return agentbranch.New() },
+		func() resource.Resource { return agentexperiment.New() },
+		func() resource.Resource { return agentidentity.New() },
 		func() resource.Resource { return agentversion.New() },
 		func() resource.Resource { return agentvariable.New() },
 		func() resource.Resource { return agentchecks.New() },
