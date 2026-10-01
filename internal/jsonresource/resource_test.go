@@ -16,3 +16,15 @@ func TestSelectKeys(t *testing.T) {
 		t.Fatalf("unexpected %#v", got)
 	}
 }
+
+func TestSelectKeysPassesThroughAllFieldsWhenUnfiltered(t *testing.T) {
+	in := map[string]any{
+		"name":      "agent-targeted scenario",
+		"max_turns": 6,
+		"agent_id":  "agent-example",
+	}
+	got := selectKeys(in, nil)
+	if len(got) != len(in) || got["agent_id"] != "agent-example" || got["max_turns"] != 6 {
+		t.Fatalf("unexpected pass-through body %#v", got)
+	}
+}
