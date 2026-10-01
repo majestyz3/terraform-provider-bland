@@ -31,7 +31,7 @@ func TestDoSendsAuthorizationAndDecodes(t *testing.T) {
 func TestDoTreatsApplicationErrorsAsFailure(t *testing.T) {
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]any{
-			"data": nil,
+			"data":   nil,
 			"errors": []any{map[string]any{"code": "BAD", "message": "nope"}},
 		})
 	}))

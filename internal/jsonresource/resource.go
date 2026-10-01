@@ -49,7 +49,7 @@ func (r *Resource) Metadata(_ context.Context, req resource.MetadataRequest, res
 
 func (r *Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	config := schema.StringAttribute{
-		Required: true,
+		Required:            true,
 		MarkdownDescription: "JSON request body. Prefer jsonencode({...}).",
 	}
 	if r.spec.Immutable {

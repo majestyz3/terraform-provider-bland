@@ -49,17 +49,23 @@ func (p *BlandProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp
 func (p *BlandProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
 	var cfg ProviderModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &cfg)...)
-	if resp.Diagnostics.HasError() { return }
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	key := os.Getenv("BLAND_API_KEY")
-	if !cfg.APIKey.IsNull() && cfg.APIKey.ValueString() != "" { key = cfg.APIKey.ValueString() }
+	if !cfg.APIKey.IsNull() && cfg.APIKey.ValueString() != "" {
+		key = cfg.APIKey.ValueString()
+	}
 	if key == "" {
 		resp.Diagnostics.AddError("Missing Bland API key", "Set provider api_key or BLAND_API_KEY.")
 		return
 	}
 
 	base := os.Getenv("BLAND_BASE_URL")
-	if !cfg.BaseURL.IsNull() && cfg.BaseURL.ValueString() != "" { base = cfg.BaseURL.ValueString() }
+	if !cfg.BaseURL.IsNull() && cfg.BaseURL.ValueString() != "" {
+		base = cfg.BaseURL.ValueString()
+	}
 
 	c := client.New(base, key)
 	resp.ResourceData = c
@@ -79,14 +85,14 @@ func spec(typeName, description, createMethod, createPath, readMethod, readPath,
 
 func pathwaySpec() func() resource.Resource {
 	return jsonresource.New(jsonresource.Spec{
-		TypeName: "conversational_pathway",
-		Description: "Manages a Bland Conversational Pathway.",
+		TypeName:     "conversational_pathway",
+		Description:  "Manages a Bland Conversational Pathway.",
 		CreateMethod: http.MethodPost, CreatePath: "/v1/pathway/create",
 		ReadMethod: http.MethodGet, ReadPath: "/v1/pathway/{id}",
 		UpdateMethod: http.MethodPost, UpdatePath: "/convo_pathway/update",
 		DeleteMethod: http.MethodDelete, DeletePath: "/v1/pathway/{id}",
-		IDPaths: []string{"data.id", "data.pathway_id", "pathway_id"},
-		CreateOnlyKeys: []string{"name", "description"},
+		IDPaths:          []string{"data.id", "data.pathway_id", "pathway_id"},
+		CreateOnlyKeys:   []string{"name", "description"},
 		PostCreateUpdate: true,
 	})
 }

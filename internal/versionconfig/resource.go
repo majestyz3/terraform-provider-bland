@@ -93,10 +93,18 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 func (r *Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var m Model
 	resp.Diagnostics.Append(req.State.Get(ctx, &m)...)
-	if resp.Diagnostics.HasError() { return }
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	out, status, err := r.client.Do(ctx, http.MethodGet, r.path(r.spec.ReadPath, m.ParentID.ValueString(), m.VersionID.ValueString()), nil)
-	if status == http.StatusNotFound { resp.State.RemoveResource(ctx); return }
-	if err != nil { resp.Diagnostics.AddError("Version read failed", err.Error()); return }
+	if status == http.StatusNotFound {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+	if err != nil {
+		resp.Diagnostics.AddError("Version read failed", err.Error())
+		return
+	}
 	m.ResponseJSON = types.StringValue(encode(out))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &m)...)
 }
