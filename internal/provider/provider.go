@@ -21,6 +21,7 @@ import (
 	"github.com/majestyz3/terraform-provider-bland/internal/agentversion"
 	"github.com/majestyz3/terraform-provider-bland/internal/client"
 	"github.com/majestyz3/terraform-provider-bland/internal/dispositionextractor"
+	"github.com/majestyz3/terraform-provider-bland/internal/jsondatasource"
 	"github.com/majestyz3/terraform-provider-bland/internal/jsonresource"
 	"github.com/majestyz3/terraform-provider-bland/internal/tool"
 	"github.com/majestyz3/terraform-provider-bland/internal/versionconfig"
@@ -131,6 +132,13 @@ func (p *BlandProvider) Resources(_ context.Context) []func() resource.Resource 
 	}
 }
 
-func (p *BlandProvider) DataSources(_ context.Context) []func() datasource.DataSource { return nil }
+func (p *BlandProvider) DataSources(_ context.Context) []func() datasource.DataSource {
+	return []func() datasource.DataSource{
+		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_info", Description: "Reads a Bland V2 Agent and its environment pointers.", Path: "/v2/agents/{id}"}),
+		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_environments", Description: "Reads a Bland V2 Agent's dev, staging, and production environment pins.", Path: "/v2/agents/{id}/environments"}),
+		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_inbound", Description: "Reads inbound phone-number bindings for a Bland V2 Agent.", Path: "/v2/agents/{id}/inbound"}),
+		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_memory_schema", Description: "Reads the schema Bland uses to remember structured information about contacts between conversations.", Path: "/v2/agents/{id}/memory-schema"}),
+	}
+}
 
 var _ provider.Provider = (*BlandProvider)(nil)
