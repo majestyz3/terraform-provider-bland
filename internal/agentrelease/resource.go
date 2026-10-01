@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/majestyz3/terraform-provider-bland/internal/client"
@@ -50,7 +51,7 @@ func (r *Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *res
 			},
 			"bump": schema.StringAttribute{
 				Optional:            true,
-				Computed:            true,
+				Default:             stringdefault.StaticString("patch"),
 				PlanModifiers:       replace,
 				MarkdownDescription: "Semantic version component to increment when the version is first published: patch, minor, or major. Defaults to patch.",
 			},
