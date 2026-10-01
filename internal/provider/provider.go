@@ -19,9 +19,13 @@ import (
 	"github.com/majestyz3/terraform-provider-bland/internal/agentinbound"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentpromotion"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentrelease"
+	"github.com/majestyz3/terraform-provider-bland/internal/agenttestscenario"
+	"github.com/majestyz3/terraform-provider-bland/internal/agenttestscenarios"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentvariable"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentversion"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentversionlatest"
+	"github.com/majestyz3/terraform-provider-bland/internal/alarm"
+	"github.com/majestyz3/terraform-provider-bland/internal/alarms"
 	"github.com/majestyz3/terraform-provider-bland/internal/client"
 	"github.com/majestyz3/terraform-provider-bland/internal/dispositionextractor"
 	"github.com/majestyz3/terraform-provider-bland/internal/evalagent"
@@ -120,6 +124,7 @@ func (p *BlandProvider) Resources(_ context.Context) []func() resource.Resource 
 		func() resource.Resource { return agentpromotion.New() },
 		func() resource.Resource { return agentrelease.New() },
 		func() resource.Resource { return agentinbound.New() },
+		func() resource.Resource { return agenttestscenario.New() },
 		func() resource.Resource { return agentversion.New() },
 		func() resource.Resource { return agentvariable.New() },
 		func() resource.Resource { return agentchecks.New() },
@@ -134,7 +139,7 @@ func (p *BlandProvider) Resources(_ context.Context) []func() resource.Resource 
 		spec("guard_rail", "Manages a Bland Guard Rail.", http.MethodPost, "/v1/guard_rails", http.MethodGet, "/v1/guard_rails/{id}", http.MethodPatch, "/v1/guard_rails/{id}", http.MethodDelete, "/v1/guard_rails/{id}", "data.id"),
 		spec("test_scenario", "Manages a Bland Agent Testing scenario.", http.MethodPost, "/v1/agent-testing/scenarios", http.MethodGet, "/v1/agent-testing/scenarios/{id}", http.MethodPut, "/v1/agent-testing/scenarios/{id}", http.MethodDelete, "/v1/agent-testing/scenarios/{id}", "data.id", "id"),
 		spec("eval_workbench", "Manages a Bland Eval Workbench.", http.MethodPost, "/v1/evals/workbench-setups", http.MethodGet, "/v1/evals/workbench-setups/{id}", http.MethodPatch, "/v1/evals/workbench-setups/{id}", http.MethodDelete, "/v1/evals/workbench-setups/{id}", "data.setup.id", "data.id", "id"),
-		spec("alarm", "Manages a Bland Alarm.", http.MethodPost, "/v1/alarms", http.MethodGet, "/v1/alarms/{id}", http.MethodPatch, "/v1/alarms/{id}", http.MethodDelete, "/v1/alarms/{id}", "data.alarm.id", "data.id", "id"),
+		func() resource.Resource { return alarm.New() },
 
 		versionconfig.New(versionconfig.Spec{TypeName: "eval_agent_version_config", Description: "Configures an editable Bland Eval Agent version.", ReadPath: "/v1/evals/agents/{parent_id}/versions/{version_id}", PatchPath: "/v1/evals/agents/{parent_id}/versions/{version_id}"}),
 		versionconfig.New(versionconfig.Spec{TypeName: "eval_workbench_version_config", Description: "Configures an editable Bland Eval Workbench version.", ReadPath: "/v1/evals/workbench-setups/{parent_id}/versions/{version_id}", PatchPath: "/v1/evals/workbench-setups/{parent_id}/versions/{version_id}"}),
@@ -149,6 +154,8 @@ func (p *BlandProvider) DataSources(_ context.Context) []func() datasource.DataS
 		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_memory_schema", Description: "Reads the schema Bland uses to remember structured information about contacts between conversations.", Path: "/v2/agents/{id}/memory-schema"}),
 		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_versions", Description: "Lists saved versions for a Bland V2 Agent.", Path: "/v2/agents/{id}/versions"}),
 		func() datasource.DataSource { return agentversionlatest.New() },
+		func() datasource.DataSource { return agenttestscenarios.New() },
+		func() datasource.DataSource { return alarms.New() },
 		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_branches", Description: "Lists open development branches for a Bland V2 Agent.", Path: "/v2/agents/{id}/branches"}),
 		jsondatasource.New(jsondatasource.Spec{TypeName: "agent_dispositions", Description: "Lists dispositions defined on a Bland V2 Agent.", Path: "/v2/agents/{id}/dispositions"}),
 		jsondatasource.New(jsondatasource.Spec{TypeName: "disposition_extractors", Description: "Lists disposition extractors available to a Bland V2 Agent.", Path: "/v2/agents/{id}/dispositions/extractors"}),

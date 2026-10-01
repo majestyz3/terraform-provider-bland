@@ -28,6 +28,7 @@ The separate `github.com/majestyz3/bland` repository contains the runnable SCAN 
 - `bland_agent_inbound_binding`
 - `bland_agent_variable`
 - `bland_agent_checks`
+- `bland_agent_test_scenario`
 - `bland_disposition_extractor`
 - `bland_tool`
 
@@ -38,6 +39,8 @@ The separate `github.com/majestyz3/bland` repository contains the runnable SCAN 
 - `data.bland_agent_memory_schema`
 - `data.bland_agent_versions`
 - `data.bland_agent_version_latest`
+- `data.bland_agent_test_scenarios`
+- `data.bland_alarms`
 - `data.bland_agent_branches`
 - `data.bland_agent_dispositions`
 - `data.bland_disposition_extractors`
@@ -137,6 +140,9 @@ Acceptance-style configuration examples live under `examples/`:
 - `examples/agent-release` — create an immutable Agent Version, configure staging checks, and publish to staging.
 - `examples/knowledge-base-readiness` — wait for asynchronous knowledge ingestion.
 - `examples/alarm-api-errors` — configure the documented public `api_errors` alarm metric.
-- `examples/test-scenario-agent` — documents the current public-API gap around creating V2 Agent-targeted scenarios and the authenticated inspection command.
+- `examples/test-scenario-agent` — create or import a V2 Agent-targeted scenario using the observed public `agent_id` field.
+- `examples/adopt-dashboard-demo` — full existing-Agent adoption flow: export snapshot, import dashboard scenarios, configure judges/checks, and publish a minor staging release.
 
-The public alarm API currently documents organization-level alarm configuration using `metric_type`, `threshold`, and notification destinations. It does not currently document per-Agent scoping, a fixed one-hour window, minimum-call counts, or an exact percentage-threshold field, so the provider examples do not invent those dashboard-only controls.
+`bland_agent_test_scenario` is the typed V2-Agent scenario resource. Dashboard-created Agent scenarios are linked with the public response field `agent_id`; the provider maps `prompt` to `tester_persona_prompt` and supports clean imports of existing dashboard scenarios. `data.bland_agent_test_scenarios` filters the organization scenario list by `agent_id` and exposes both a typed list and a name-to-ID map for `bland_agent_checks`.
+
+`bland_alarm` remains full-fidelity JSON for the public Alarm API, but now reconstructs the documented request fields on import so existing public-API alarms can be adopted cleanly. `data.bland_alarms` lists visible alarms and exposes an optional name-to-ID map when the API returns names. The supplied organization export contained no alarms, so examples do not invent dashboard-only scope/window/minimum-call fields or a missing alarm ID.
