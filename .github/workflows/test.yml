@@ -5,7 +5,7 @@ on:
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   test:
@@ -16,12 +16,20 @@ jobs:
         with:
           go-version: '1.23.x'
           cache: true
-      - name: Format
-        run: test -z "$(gofmt -l .)"
-      - name: Tidy check
+      - name: Normalize source
         run: |
+          gofmt -w .
           go mod tidy
-          git diff --exit-code -- go.mod go.sum
+      - name: Commit normalization
+        if: github.event_name == 'push'
+        run: |
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "chore: gofmt and tidy"
+            git push
+          fi
       - name: Test
         run: go test ./...
       - name: Vet
