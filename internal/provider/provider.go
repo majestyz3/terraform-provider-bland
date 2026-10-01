@@ -96,7 +96,7 @@ func pathwaySpec() func() resource.Resource {
 		Description:  "Manages a Bland Conversational Pathway.",
 		CreateMethod: http.MethodPost, CreatePath: "/v1/pathway/create",
 		ReadMethod: http.MethodGet, ReadPath: "/v1/pathway/{id}",
-		UpdateMethod: http.MethodPost, UpdatePath: "/convo_pathway/update",
+		UpdateMethod: http.MethodPost, UpdatePath: "/v1/pathway/{id}",
 		DeleteMethod: http.MethodDelete, DeletePath: "/v1/pathway/{id}",
 		IDPaths:          []string{"data.id", "data.pathway_id", "pathway_id"},
 		CreateOnlyKeys:   []string{"name", "description"},
