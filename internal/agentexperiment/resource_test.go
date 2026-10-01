@@ -5,9 +5,9 @@ import "testing"
 func TestMutableConfig(t *testing.T) {
 	in := map[string]any{
 		"variant_version_id": "immutable",
-		"baseline_env": "production",
+		"baseline_env":       "production",
 		"traffic_percentage": 25,
-		"run_hours": nil,
+		"run_hours":          nil,
 		"variant_call_quota": 100,
 	}
 	got := mutableConfig(in)
