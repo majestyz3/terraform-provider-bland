@@ -13,6 +13,7 @@ import (
 	"github.com/majestyz3/terraform-provider-bland/internal/agent"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentbranch"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentchecks"
+	"github.com/majestyz3/terraform-provider-bland/internal/agentdisposition"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentexperiment"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentidentity"
 	"github.com/majestyz3/terraform-provider-bland/internal/agentvariable"
@@ -104,6 +105,7 @@ func (p *BlandProvider) Resources(_ context.Context) []func() resource.Resource 
 	return []func() resource.Resource{
 		func() resource.Resource { return agent.New() },
 		func() resource.Resource { return agentbranch.New() },
+		func() resource.Resource { return agentdisposition.New() },
 		func() resource.Resource { return agentexperiment.New() },
 		func() resource.Resource { return agentidentity.New() },
 		func() resource.Resource { return agentversion.New() },
