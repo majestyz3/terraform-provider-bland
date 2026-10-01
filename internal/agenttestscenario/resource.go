@@ -126,6 +126,25 @@ func bodyFromModel(m Model) (map[string]any, error) {
 	return body, nil
 }
 
+func extraConfigFromResponse(data map[string]any) map[string]any {
+	extra := map[string]any{}
+	for _, key := range []string{
+		"category", "tester_persona_name", "request_data", "start_node_id",
+		"bland_tone_enabled", "is_required_for_promotion", "input_messages",
+		"advanced_instructions", "metadata", "assertions",
+	} {
+		if value, ok := data[key]; ok && value != nil {
+			extra[key] = value
+		}
+	}
+	return extra
+}
+
+func compact(v any) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
 func hydrate(m *Model, out map[string]any) error {
 	data := scenarioData(out)
 	id, _ := data["id"].(string)
@@ -147,7 +166,7 @@ func hydrate(m *Model, out map[string]any) error {
 		m.Description = types.StringNull()
 	}
 	if m.ExtraJSON.IsNull() || m.ExtraJSON.IsUnknown() || m.ExtraJSON.ValueString() == "" {
-		m.ExtraJSON = types.StringValue("{}")
+		m.ExtraJSON = types.StringValue(compact(extraConfigFromResponse(data)))
 	}
 	m.ResponseJSON = types.StringValue(encode(out))
 	return nil
