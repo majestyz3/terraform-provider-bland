@@ -34,6 +34,14 @@ The separate `github.com/majestyz3/bland` repository is reserved for Terraform c
 - `data.bland_agent_environments`
 - `data.bland_agent_inbound`
 - `data.bland_agent_memory_schema`
+- `data.bland_agent_versions`
+- `data.bland_agent_branches`
+- `data.bland_agent_dispositions`
+- `data.bland_disposition_extractors`
+- `data.bland_disposition_judge_catalog`
+- `data.bland_disposition_variable_catalog`
+- `data.bland_disposition_model_profile_catalog`
+- `data.bland_disposition_extractor_catalog`
 
 ### Shared / compatibility
 - `bland_persona`
