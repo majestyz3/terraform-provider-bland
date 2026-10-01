@@ -37,7 +37,7 @@ func (r *Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *res
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{Computed: true},
 			"agent_id": schema.StringAttribute{
-				Required: true,
+				Required:      true,
 				PlanModifiers: []planmodifier.String{stringplanmodifier.RequiresReplace()},
 			},
 			"config_json": schema.StringAttribute{
