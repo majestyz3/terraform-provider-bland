@@ -1,6 +1,7 @@
 package agenttestscenario
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -31,12 +32,21 @@ func TestHydrateImportedScenario(t *testing.T) {
 	out := map[string]any{"data": map[string]any{
 		"id": "scenario-1", "agent_id": "agent-1", "name": "Test A",
 		"tester_persona_prompt": "Caller instructions", "max_turns": float64(20),
+		"category": "CUSTOM", "bland_tone_enabled": false, "is_required_for_promotion": false,
+		"input_messages": []any{}, "assertions": []any{},
 	}}
 	if err := hydrate(&m, out); err != nil {
 		t.Fatal(err)
 	}
 	if m.AgentID.ValueString() != "agent-1" || m.Name.ValueString() != "Test A" || m.Prompt.ValueString() != "Caller instructions" || m.MaxTurns.ValueInt64() != 20 {
 		t.Fatalf("unexpected hydrated model: %#v", m)
+	}
+	var extra map[string]any
+	if err := json.Unmarshal([]byte(m.ExtraJSON.ValueString()), &extra); err != nil {
+		t.Fatal(err)
+	}
+	if extra["category"] != "CUSTOM" || extra["bland_tone_enabled"] != false {
+		t.Fatalf("unexpected imported extra config: %#v", extra)
 	}
 }
 
