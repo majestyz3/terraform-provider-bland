@@ -20,6 +20,7 @@ The separate `github.com/majestyz3/bland` repository is reserved for Terraform c
 - `bland_agent`
 - `bland_agent_version`
 - `bland_agent_branch`
+- `bland_agent_disposition`
 - `bland_agent_experiment`
 - `bland_agent_identity`
 - `bland_agent_variable`
@@ -55,6 +56,7 @@ Set `BLAND_BASE_URL` (or provider `base_url`) for a compatible private/self-host
 - Examples never purchase numbers, place calls, send SMS, or configure a real transfer destination.
 - Agent Versions are immutable.
 - Publish/promote/rollback remains an explicit release-management action rather than an implicit `terraform apply` side effect.
+- Disposition drafts are desired state; publishing a disposition remains an explicit release action.
 - Destroying an experiment stops it; Bland retains its completed experiment history.
 - Destroying an agent identity only removes it from Terraform state because Bland does not expose an identity delete endpoint.
 - Runtime transcripts, recordings, test runs, and eval results are not modeled as desired-state resources.
