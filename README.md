@@ -12,7 +12,7 @@ Provider source code lives here:
 github.com/majestyz3/terraform-provider-bland
 ```
 
-The separate `github.com/majestyz3/bland` repository is reserved for Terraform configuration specific to the SCAN interview demo and is **not** the provider source repository.
+The separate `github.com/majestyz3/bland` repository contains the runnable SCAN interview demo that consumes this provider. Its CI builds this provider and exercises a full Terraform apply/zero-diff-plan/destroy lifecycle against a deterministic mock Bland API.
 
 ## Current resource families
 
