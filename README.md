@@ -29,6 +29,12 @@ The separate `github.com/majestyz3/bland` repository is reserved for Terraform c
 - `bland_disposition_extractor`
 - `bland_tool`
 
+### Read-only data sources
+- `data.bland_agent_info`
+- `data.bland_agent_environments`
+- `data.bland_agent_inbound`
+- `data.bland_agent_memory_schema`
+
 ### Shared / compatibility
 - `bland_persona`
 - `bland_conversational_pathway`
@@ -40,7 +46,7 @@ The separate `github.com/majestyz3/bland` repository is reserved for Terraform c
 - `bland_alarm`
 - Eval Agent/Workbench editable-version configuration resources
 
-Fast-moving Bland objects use full-fidelity JSON attributes so newly-added API fields can be represented without destructive provider flattening.
+Fast-moving Bland objects use full-fidelity JSON attributes so newly-added API fields can be represented without destructive provider flattening. Shared JSON-backed resources now support standard Terraform import by Bland object ID.
 
 ## Authentication
 
