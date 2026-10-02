@@ -89,6 +89,9 @@ func extractID(out map[string]any) string {
 		if id, _ := data["id"].(string); id != "" {
 			return id
 		}
+		if id, _ := data["knowledge_base_id"].(string); id != "" {
+			return id
+		}
 	}
 	if id, _ := out["id"].(string); id != "" {
 		return id
@@ -101,9 +104,19 @@ func statusFields(out map[string]any) (string, string) {
 	if data == nil {
 		return "", ""
 	}
-	status, _ := data["status"].(string)
-	message, _ := data["error_message"].(string)
-	return status, message
+	if status, _ := data["status"].(string); status != "" {
+		message, _ := data["error_message"].(string)
+		return status, message
+	}
+	for _, key := range []string{"knowledge_base", "item"} {
+		if nested, _ := data[key].(map[string]any); nested != nil {
+			if status, _ := nested["status"].(string); status != "" {
+				message, _ := nested["error_message"].(string)
+				return status, message
+			}
+		}
+	}
+	return "", ""
 }
 
 func (r *Resource) waitReady(ctx context.Context, id string, timeout time.Duration) (map[string]any, string, error) {
@@ -114,6 +127,9 @@ func (r *Resource) waitReady(ctx context.Context, id string, timeout time.Durati
 			return out, "", err
 		}
 		status, message := statusFields(out)
+		if status == "" {
+			return out, "", fmt.Errorf("knowledge base status missing from response: %s", encode(out))
+		}
 		switch status {
 		case "COMPLETED":
 			return out, status, nil
