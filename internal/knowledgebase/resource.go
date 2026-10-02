@@ -46,6 +46,7 @@ func (r *Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *res
 			},
 			"ready_timeout": schema.StringAttribute{
 				Optional:            true,
+				Computed:            true,
 				Default:             stringdefault.StaticString("5m"),
 				PlanModifiers:       []planmodifier.String{stringplanmodifier.RequiresReplace()},
 				MarkdownDescription: "Maximum time to wait for status COMPLETED after creation. Go duration syntax; defaults to 5m.",

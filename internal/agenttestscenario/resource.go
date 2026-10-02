@@ -53,12 +53,14 @@ func (r *Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *res
 			},
 			"max_turns": schema.Int64Attribute{
 				Optional:            true,
+				Computed:            true,
 				Default:             int64default.StaticInt64(20),
 				MarkdownDescription: "Maximum simulated conversation turns. Must be between 1 and 50.",
 			},
 			"description": schema.StringAttribute{Optional: true},
 			"extra_json": schema.StringAttribute{
 				Optional:            true,
+				Computed:            true,
 				Default:             stringdefault.StaticString("{}"),
 				MarkdownDescription: "Additional documented Agent Testing fields merged into the request body. Core fields managed by this resource take precedence.",
 			},
