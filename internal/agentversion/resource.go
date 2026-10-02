@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -96,13 +97,32 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &m)...)
 }
 
+func versionsListPath(agentID string) string {
+	return "/v2/agents/" + url.PathEscape(agentID) + "/versions?limit=200"
+}
+
+func applyListResult(m *Model, out map[string]any) bool {
+	data, _ := out["data"].([]any)
+	for _, raw := range data {
+		entry, _ := raw.(map[string]any)
+		if entry == nil {
+			continue
+		}
+		if id, _ := entry["id"].(string); id == m.ID.ValueString() {
+			m.ResponseJSON = types.StringValue(encode(entry))
+			return true
+		}
+	}
+	return false
+}
+
 func (r *Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var m Model
 	resp.Diagnostics.Append(req.State.Get(ctx, &m)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	out, status, err := r.client.Do(ctx, http.MethodGet, "/v2/agents/"+m.AgentID.ValueString()+"/versions/"+m.ID.ValueString(), nil)
+	out, status, err := r.client.Do(ctx, http.MethodGet, versionsListPath(m.AgentID.ValueString()), nil)
 	if status == http.StatusNotFound {
 		resp.State.RemoveResource(ctx)
 		return
@@ -111,7 +131,10 @@ func (r *Resource) Read(ctx context.Context, req resource.ReadRequest, resp *res
 		resp.Diagnostics.AddError("Read Agent Version failed", err.Error())
 		return
 	}
-	m.ResponseJSON = types.StringValue(encode(out))
+	if !applyListResult(&m, out) {
+		resp.State.RemoveResource(ctx)
+		return
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &m)...)
 }
 
