@@ -1,8 +1,8 @@
 # Terraform Provider for Bland AI
 
-A from-scratch Terraform provider targeting Bland's current public REST APIs, including the 2026 V2 Agent lifecycle.
+A Terraform provider targeting Bland's current public REST APIs, including the 2026 V2 Agent lifecycle.
 
-> Status: **alpha.** It is scoped first to reproducibly manage the synthetic SCAN Health member-services demo. Validate against a Bland test organization before production use.
+> Status: **alpha.** not to be used in production 
 
 ## Repository
 
